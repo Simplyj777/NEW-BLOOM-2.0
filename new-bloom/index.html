@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Bloom 2.0</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="sparkles"></div>
+  <div class="floating-petals"></div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="hero-badge">Spiritual Self-Discovery Platform</p>
+      <h1>New Bloom 2.0</h1>
+      <p class="hero-text">
+        Discover your numerology, zodiac energy, spiritual themes, journal reflections,
+        and personal insight in one beautiful space.
+      </p>
+      <div class="hero-actions">
+        <a href="#mainApp" class="btn gold">Start Your Reading</a>
+        <a href="dashboard.html" class="btn dark">Open Dashboard</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="mainApp">
+    <section class="card intro-card">
+      <h2>Welcome to New Bloom</h2>
+      <p>
+        This is your self-discovery space for spiritual reflection, numerology insight,
+        energy awareness, and deeper personal understanding. Fill out your information,
+        explore your sections, and save your readings when you're logged in.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Your Information</h2>
+      <div class="grid">
+        <div class="field">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" placeholder="Enter your full name" />
+        </div>
+
+        <div class="field">
+          <label for="birthDate">Birth Date</label>
+          <input type="date" id="birthDate" />
+        </div>
+
+        <div class="field">
+          <label for="currentYear">Current Year</label>
+          <input type="number" id="currentYear" value="2026" placeholder="2026" />
+        </div>
+
+        <div class="field">
+          <label for="journalPrompt">Current Mood / Focus</label>
+          <input
+            type="text"
+            id="journalPrompt"
+            placeholder="Example: clarity, love, purpose, healing"
+          />
+        </div>
+      </div>
+
+      <div class="button-row top-spacing">
+        <button id="generateAllBtn" class="btn gold">Generate Full Reading</button>
+        <button id="saveReadingBtn" class="btn pink">Save Reading</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Explore Your Sections</h2>
+
+      <div class="tab-buttons">
+        <button class="tab-btn active" data-tab="numerologyTab">Numerology</button>
+        <button class="tab-btn" data-tab="zodiacTab">Chinese Zodiac</button>
+        <button class="tab-btn" data-tab="astrologyTab">Energy Insight</button>
+        <button class="tab-btn" data-tab="journalTab">Journal Reflection</button>
+        <button class="tab-btn" data-tab="authTab">Login</button>
+      </div>
+
+      <div class="tab-content active" id="numerologyTab">
+        <h3>Numerology Reading</h3>
+        <p><strong>Life Path:</strong> <span id="lifePathResult">—</span></p>
+        <p><strong>Personal Year:</strong> <span id="personalYearResult">—</span></p>
+
+        <div class="reading-box">
+          <h4>Your Numerology Insight</h4>
+          <p id="numerologyReadingText">Generate your reading to see your numerology insight.</p>
+        </div>
+      </div>
+
+      <div class="tab-content" id="zodiacTab">
+        <h3>Chinese Zodiac</h3>
+        <p><strong>Zodiac Animal:</strong> <span id="zodiacAnimalResult">—</span></p>
+
+        <div class="reading-box">
+          <h4>Your Zodiac Insight</h4>
+          <p id="zodiacReadingText">Generate your reading to see your Chinese zodiac insight.</p>
+        </div>
+      </div>
+
+      <div class="tab-content" id="astrologyTab">
+        <h3>Energy Insight</h3>
+        <p><strong>Current Theme:</strong> <span id="energyThemeResult">—</span></p>
+
+        <div class="reading-box">
+          <h4>Your Current Spiritual Message</h4>
+          <p id="energyReadingText">Generate your reading to see your current energy insight.</p>
+        </div>
+      </div>
+
+      <div class="tab-content" id="journalTab">
+        <h3>Journal Reflection</h3>
+        <div class="reading-box">
+          <h4>Your Reflection Prompt</h4>
+          <p id="journalReflectionText">Generate your reading to see your reflection prompt.</p>
+        </div>
+      </div>
+
+      <div class="tab-content" id="authTab">
+        <h3>Login / Sign Up</h3>
+
+        <div class="grid">
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" />
+          </div>
+        </div>
+
+        <div class="button-row top-spacing">
+          <button id="signupBtn" class="btn gold">Sign Up</button>
+          <button id="loginBtn" class="btn pink">Log In</button>
+          <button id="logoutBtn" class="btn dark">Log Out</button>
+        </div>
+
+        <p id="authStatus" class="status">Not logged in</p>
+      </div>
+    </section>
+
+    <section class="card full-report-card">
+      <h2>Full Report Summary</h2>
+      <div class="reading-box report-box">
+        <p id="fullReportText">
+          Your full report will appear here after you generate your reading.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
