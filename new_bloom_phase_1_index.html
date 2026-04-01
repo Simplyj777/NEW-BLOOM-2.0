@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Bloom 2.0</title>
+  <style>
+    :root {
+      --bg-1: #09070f;
+      --bg-2: #130f1f;
+      --panel: rgba(17, 12, 31, 0.88);
+      --panel-2: rgba(26, 18, 45, 0.9);
+      --gold: #e3c16f;
+      --gold-soft: #f2ddb0;
+      --indigo: #5a44c7;
+      --indigo-soft: #8c7bdf;
+      --text: #f8f4ff;
+      --muted: #cbbde7;
+      --border: rgba(227, 193, 111, 0.22);
+      --danger: #ff8b9c;
+      --success: #9ee3bc;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(90, 68, 199, 0.25), transparent 30%),
+        radial-gradient(circle at top right, rgba(227, 193, 111, 0.18), transparent 25%),
+        linear-gradient(180deg, var(--bg-1) 0%, #0d0b15 32%, var(--bg-2) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      background-image:
+        radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.85), transparent 50%),
+        radial-gradient(2px 2px at 75% 12%, rgba(227,193,111,0.85), transparent 50%),
+        radial-gradient(1.5px 1.5px at 35% 75%, rgba(255,255,255,0.7), transparent 50%),
+        radial-gradient(2px 2px at 90% 60%, rgba(227,193,111,0.75), transparent 50%),
+        radial-gradient(1.6px 1.6px at 55% 45%, rgba(255,255,255,0.55), transparent 50%);
+      opacity: 0.7;
+      animation: shimmer 8s linear infinite;
+    }
+
+    body::after {
+      background: linear-gradient(180deg, transparent, rgba(227, 193, 111, 0.04), transparent);
+      animation: glow 6s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateY(-8px); }
+      50% { transform: translateY(8px); }
+      100% { transform: translateY(-8px); }
+    }
+
+    @keyframes glow {
+      0%, 100% { opacity: 0.25; }
+      50% { opacity: 0.55; }
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      padding: 72px 0 32px;
+    }
+
+    .hero-card {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      background: linear-gradient(180deg, rgba(23, 16, 43, 0.88), rgba(11, 8, 22, 0.9));
+      border: 1px solid var(--border);
+      border-radius: 34px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      width: 380px;
+      height: 380px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(90, 68, 199, 0.24), transparent 65%);
+      top: -120px;
+      right: -80px;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(227, 193, 111, 0.2);
+      border-radius: 999px;
+      color: var(--gold-soft);
+      font-size: 0.88rem;
+      letter-spacing: 0.02em;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 5vw, 4.3rem);
+      line-height: 0.98;
+      margin: 0 0 16px;
+      letter-spacing: -0.04em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #fff6dd 0%, var(--gold) 45%, var(--indigo-soft) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.04rem;
+      line-height: 1.75;
+      max-width: 720px;
+      margin: 0 0 24px;
+    }
+
+    .hero-points {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .point {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(227, 193, 111, 0.12);
+      border-radius: 18px;
+      padding: 14px 16px;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    .point strong {
+      color: var(--gold-soft);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .preview-panel {
+      background: linear-gradient(180deg, rgba(19, 13, 37, 0.9), rgba(12, 8, 23, 0.94));
+      border: 1px solid rgba(227,193,111,0.18);
+      border-radius: 28px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100%;
+    }
+
+    .preview-title {
+      font-size: 0.92rem;
+      color: var(--gold-soft);
+      margin: 0 0 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .preview-box {
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .mini-card p {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .section {
+      padding: 26px 0;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 3vw, 2.5rem);
+      margin: 0 0 10px;
+      letter-spacing: -0.03em;
+    }
+
+    .section-subtext {
+      color: var(--muted);
+      line-height: 1.75;
+      margin: 0 0 22px;
+      max-width: 820px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      padding: 26px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.95rem;
+      color: var(--gold-soft);
+    }
+
+    input,
+    textarea,
+    button {
+      font: inherit;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(227,193,111,0.16);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 14px 16px;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(255,255,255,0.36);
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: rgba(227,193,111,0.52);
+      box-shadow: 0 0 0 4px rgba(227,193,111,0.09);
+      transform: translateY(-1px);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .btn {
+      border: none;
+      padding: 14px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold) 0%, #f5deb2 100%);
+      color: #1f142f;
+      box-shadow: 0 10px 30px rgba(227,193,111,0.22);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(227,193,111,0.28);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-2px);
+    }
+
+    .helper {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .results-shell {
+      display: grid;
+      gap: 18px;
+    }
+
+    .placeholder {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 18px;
+      border-radius: 24px;
+      border: 1px dashed rgba(227,193,111,0.2);
+      background: rgba(255,255,255,0.025);
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .result-header {
+      padding: 20px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(90, 68, 199, 0.22), rgba(227, 193, 111, 0.11));
+      border: 1px solid rgba(227,193,111,0.2);
+    }
+
+    .result-header h3 {
+      margin: 0 0 8px;
+      font-size: 1.45rem;
+    }
+
+    .result-header p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gold-soft);
+      margin-bottom: 8px;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .stat-text {
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    .deep-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(227,193,111,0.12);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .deep-card h4 {
+      margin: 0 0 10px;
+      color: var(--gold-soft);
+      font-size: 1rem;
+    }
+
+    .deep-card p,
+    .deep-card ul {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    .deep-card ul {
+      padding-left: 18px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .pill {
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .error-box,
+    .success-box {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .error-box {
+      background: rgba(255, 139, 156, 0.08);
+      border: 1px solid rgba(255, 139, 156, 0.24);
+      color: #ffd4db;
+    }
+
+    .success-box {
+      background: rgba(158, 227, 188, 0.08);
+      border: 1px solid rgba(158, 227, 188, 0.24);
+      color: #d8ffe8;
+    }
+
+    .next-preview {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .next-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .next-item h4 {
+      margin: 0 0 8px;
+      color: var(--gold-soft);
+    }
+
+    .next-item p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      padding: 30px 0 60px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 980px) {
+      .hero-card,
+      .grid,
+      .next-preview {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 20px, 1180px);
+      }
+
+      .hero {
+        padding-top: 32px;
+      }
+
+      .hero-card,
+      .card {
+        padding: 20px;
+        border-radius: 24px;
+      }
+
+      .form-grid,
+      .stat-grid,
+      .hero-points {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        line-height: 1.04;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div>
+            <div class="eyebrow">✨ New Bloom 2.0 • Self-discovery with clarity, depth, and guidance</div>
+            <h1>
+              Discover who you are with
+              <span class="gradient-text">numerology that feels personal</span>
+            </h1>
+            <p>
+              Welcome to the first phase of <strong>New Bloom 2.0</strong>. This starter version introduces your
+              homepage experience and your first live self-discovery tool: a numerology reading that breaks down
+              the user’s core energy in a way that feels understandable, warm, and useful.
+            </p>
+            <div class="hero-points">
+              <div class="point">
+                <strong>Human-centered guidance</strong>
+                Easy-to-understand explanations instead of cold or confusing chart language.
+              </div>
+              <div class="point">
+                <strong>Personalized insight</strong>
+                Gives users their core number plus strengths, challenges, and alignment advice.
+              </div>
+              <div class="point">
+                <strong>Built for expansion</strong>
+                This phase is designed so you can add birth chart, human design, AI advice, and journaling next.
+              </div>
+              <div class="point">
+                <strong>Your aesthetic</strong>
+                Indigo, black, and gold with a mystical glow that already feels like a real brand.
+              </div>
+            </div>
+          </div>
+
+          <aside class="preview-panel">
+            <p class="preview-title">What this phase includes</p>
+            <div class="preview-box">
+              <div class="mini-card">
+                <h3>1. Welcome section</h3>
+                <p>A polished homepage introducing the user to the New Bloom world.</p>
+              </div>
+              <div class="mini-card">
+                <h3>2. Input form</h3>
+                <p>Users enter their full name and date of birth to begin their reading.</p>
+              </div>
+              <div class="mini-card">
+                <h3>3. Numerology results</h3>
+                <p>Shows life path, birthday number, attitude number, personal year, and simple guidance.</p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Phase 1 — Numerology Starter Experience</h2>
+        <p class="section-subtext">
+          This section is your working foundation. It gives your users a beautiful first impression and a real
+          interactive result. Later, this same structure can connect to your birth chart system, human design,
+          AI advice engine, journal, and saved readings.
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <h3 style="margin-top:0; font-size:1.35rem;">Enter your information</h3>
+            <p class="section-subtext" style="margin-top:10px; margin-bottom:18px; max-width:none;">
+              Start with the essentials. This first version calculates core numerology information and explains
+              the energy in a way people can actually understand.
+            </p>
+
+            <form id="readingForm">
+              <div class="form-grid">
+                <div class="field full">
+                  <label for="fullName">Full Name</label>
+                  <input id="fullName" name="fullName" type="text" placeholder="Enter your full name" />
+                </div>
+
+                <div class="field">
+                  <label for="birthDate">Date of Birth</label>
+                  <input id="birthDate" name="birthDate" type="date" />
+                </div>
+
+                <div class="field">
+                  <label for="focusArea">Current Focus</label>
+                  <input id="focusArea" name="focusArea" type="text" placeholder="Love, career, healing, confidence..." />
+                </div>
+              </div>
+
+              <div class="button-row">
+                <button type="submit" class="btn btn-primary">Generate My Reading</button>
+                <button type="button" class="btn btn-secondary" id="fillDemo">Fill Demo Data</button>
+                <button type="button" class="btn btn-secondary" id="clearForm">Clear</button>
+              </div>
+            </form>
+
+            <div id="messageBox" class="hidden"></div>
+
+            <p class="helper">
+              In New Bloom 2.0, this will later connect to your full system: <strong>human design, birth chart,
+              journaling, AI advice, and saved reflections</strong>.
+            </p>
+          </div>
+
+          <div class="card results-shell">
+            <div id="emptyState" class="placeholder">
+              <div>
+                <h3 style="margin-top:0; font-size:1.35rem;">Your reading will appear here</h3>
+                <p>
+                  Fill out the form to generate a numerology reading with clear explanations, strengths,
+                  challenges, and what this energy may mean for your life right now.
+                </p>
+              </div>
+            </div>
+
+            <div id="results" class="hidden">
+              <div class="result-header">
+                <h3 id="resultTitle">Your New Bloom Reading</h3>
+                <p id="resultSummary"></p>
+              </div>
+
+              <div class="stat-grid">
+                <div class="stat-card">
+                  <div class="stat-label">Life Path Number</div>
+                  <div class="stat-number" id="lifePathNumber">—</div>
+                  <div class="stat-text" id="lifePathText"></div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">Birthday Number</div>
+                  <div class="stat-number" id="birthdayNumber">—</div>
+                  <div class="stat-text" id="birthdayText"></div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">Attitude Number</div>
+                  <div class="stat-number" id="attitudeNumber">—</div>
+                  <div class="stat-text" id="attitudeText"></div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">Personal Year</div>
+                  <div class="stat-number" id="personalYearNumber">—</div>
+                  <div class="stat-text" id="personalYearText"></div>
+                </div>
+              </div>
+
+              <div class="deep-card">
+                <h4>Main themes</h4>
+                <div class="pill-row" id="themesRow"></div>
+              </div>
+
+              <div class="deep-card">
+                <h4>What this means for you right now</h4>
+                <p id="meaningNow"></p>
+              </div>
+
+              <div class="deep-card">
+                <h4>Strengths to lean into</h4>
+                <ul id="strengthList"></ul>
+              </div>
+
+              <div class="deep-card">
+                <h4>Challenges to watch</h4>
+                <ul id="challengeList"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:24px;">
+          <h3 style="margin-top:0; font-size:1.35rem;">What gets added in Phase 2</h3>
+          <div class="next-preview">
+            <div class="next-item">
+              <h4>AI Advice</h4>
+              <p>Users get practical next-step guidance based on their reading and current focus.</p>
+            </div>
+            <div class="next-item">
+              <h4>Journal + Reflection</h4>
+              <p>A journaling area where users reflect and receive supportive insight back.</p>
+            </div>
+            <div class="next-item">
+              <h4>More systems</h4>
+              <p>Birth chart and human design modules can plug into the same dashboard layout.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    New Bloom 2.0 • Phase 1 starter build • Ready for VS Code, GitHub, and your next expansion
+  </footer>
+
+  <script>
+    const readingForm = document.getElementById('readingForm');
+    const fullNameInput = document.getElementById('fullName');
+    const birthDateInput = document.getElementById('birthDate');
+    const focusAreaInput = document.getElementById('focusArea');
+    const fillDemoBtn = document.getElementById('fillDemo');
+    const clearFormBtn = document.getElementById('clearForm');
+    const messageBox = document.getElementById('messageBox');
+    const emptyState = document.getElementById('emptyState');
+    const results = document.getElementById('results');
+
+    const profiles = {
+      1: {
+        title: 'The Independent Creator',
+        text: '1 energy is about leadership, originality, courage, and learning to trust your own direction.',
+        themes: ['Leadership', 'Confidence', 'Fresh starts', 'Self-trust'],
+        strengths: ['You naturally push forward and start new things.', 'You can inspire others by being bold and original.', 'You do best when you honor your own voice instead of shrinking it.'],
+        challenges: ['Impatience can make you rush the process.', 'You may feel pressure to prove yourself alone.', 'At times, pride can block support you actually need.'],
+        now: 'Right now, this energy asks you to move with intention, trust your instincts, and stop waiting for permission to begin.'
+      },
+      2: {
+        title: 'The Intuitive Peacemaker',
+        text: '2 energy is sensitive, observant, relational, and deeply intuitive. It is the energy of harmony and emotional intelligence.',
+        themes: ['Partnership', 'Sensitivity', 'Patience', 'Intuition'],
+        strengths: ['You pick up on emotional energy quickly.', 'You are gifted at bringing softness, understanding, and support.', 'You often notice what others miss.'],
+        challenges: ['Overthinking and self-doubt can slow you down.', 'You may avoid conflict even when honesty is needed.', 'You can absorb other people’s energy too easily.'],
+        now: 'This season is asking you to protect your peace, trust what you feel, and stop dismissing your inner knowing.'
+      },
+      3: {
+        title: 'The Expressive Light',
+        text: '3 energy is creative, magnetic, emotional, and meant to be expressed through words, art, voice, or presence.',
+        themes: ['Expression', 'Joy', 'Creativity', 'Communication'],
+        strengths: ['You can bring life into a room and make ideas feel exciting.', 'Your voice has impact when you use it honestly.', 'You are often meant to create, inspire, teach, or entertain.'],
+        challenges: ['Scattered energy can keep you from finishing.', 'You may joke through pain instead of processing it.', 'Mood shifts can affect your consistency.'],
+        now: 'You are being called to express what has been sitting inside of you. Your healing grows when you stop hiding your real feelings and gifts.'
+      },
+      4: {
+        title: 'The Builder',
+        text: '4 energy is grounded, dependable, practical, and deeply connected to structure, discipline, and long-term stability.',
+        themes: ['Structure', 'Consistency', 'Stability', 'Discipline'],
+        strengths: ['You know how to build things step by step.', 'People often see you as reliable and steady.', 'You can create strong foundations that last.'],
+        challenges: ['Rigidity can make change harder than it needs to be.', 'You may carry too much responsibility.', 'Perfectionism can delay progress.'],
+        now: 'Your growth is in building with patience. Keep showing up for what matters, but leave room for flexibility and breath.'
+      },
+      5: {
+        title: 'The Free Spirit',
+        text: '5 energy is adventurous, curious, dynamic, and meant to experience life through movement, change, and freedom.',
+        themes: ['Freedom', 'Movement', 'Adventure', 'Change'],
+        strengths: ['You adapt quickly and bring fresh energy.', 'You are often exciting, persuasive, and open-minded.', 'You help others break out of stale patterns.'],
+        challenges: ['Restlessness can make consistency difficult.', 'Impulsiveness may create unnecessary detours.', 'You may resist commitment when it feels limiting.'],
+        now: 'Right now, your lesson is learning how to enjoy freedom without losing direction. You do not have to run from stillness to stay powerful.'
+      },
+      6: {
+        title: 'The Nurturer',
+        text: '6 energy is loving, responsible, protective, and connected to healing, care, beauty, and home.',
+        themes: ['Love', 'Service', 'Responsibility', 'Healing'],
+        strengths: ['You are naturally caring and supportive.', 'You often create safety for others.', 'You are drawn to making life more beautiful, balanced, and meaningful.'],
+        challenges: ['You may overgive and neglect your own needs.', 'Control can show up when you feel responsible for everything.', 'You can confuse being needed with being loved.'],
+        now: 'This is a time to care for yourself with the same devotion you pour into others. Support is beautiful, but so are boundaries.'
+      },
+      7: {
+        title: 'The Seeker',
+        text: '7 energy is deep, reflective, spiritual, analytical, and drawn to hidden meaning, truth, and inner wisdom.',
+        themes: ['Spiritual depth', 'Inner wisdom', 'Analysis', 'Reflection'],
+        strengths: ['You think deeply and search beneath the surface.', 'You often have strong intuition mixed with research and observation.', 'You are meant to understand life on a profound level.'],
+        challenges: ['Isolation can become a comfort zone.', 'You may overanalyze instead of acting.', 'It can be hard for others to know what you feel inside.'],
+        now: 'You are in a period of inner awakening. Trust your insights, but remember that wisdom also has to be lived, not only studied.'
+      },
+      8: {
+        title: 'The Power Alchemist',
+        text: '8 energy is ambitious, strategic, magnetic, and connected to power, authority, success, and material mastery.',
+        themes: ['Power', 'Abundance', 'Discipline', 'Authority'],
+        strengths: ['You can lead, organize, and build strong outcomes.', 'You understand results and impact.', 'You often have a natural ability to create influence and momentum.'],
+        challenges: ['Control issues can rise when life feels uncertain.', 'You may tie your worth to achievement.', 'Emotional softness can feel harder to access.'],
+        now: 'This season is about using your power wisely. Build, lead, and rise, but stay connected to your values while you do it.'
+      },
+      9: {
+        title: 'The Compassionate Visionary',
+        text: '9 energy is compassionate, wise, emotional, and connected to purpose, endings, and service to something bigger.',
+        themes: ['Purpose', 'Compassion', 'Release', 'Vision'],
+        strengths: ['You can feel the bigger picture and care deeply about meaning.', 'You often carry healing, artistic, or humanitarian energy.', 'You help others see beyond themselves.'],
+        challenges: ['Letting go can be especially hard.', 'You may pour into everyone and forget yourself.', 'Disappointment can hit deeply when people do not meet your heart.'],
+        now: 'You are being asked to release what no longer fits and trust that making space is part of your next evolution.'
+      },
+      11: {
+        title: 'The Spiritual Messenger',
+        text: '11 is a master number connected to illumination, inspiration, intuition, and heightened spiritual sensitivity.',
+        themes: ['Inspiration', 'Intuition', 'Awakening', 'Vision'],
+        strengths: ['You can sense what is coming before others do.', 'Your presence can awaken people.', 'You are here to inspire, guide, and shine light into confusion.'],
+        challenges: ['Anxiety can increase when your energy is not grounded.', 'You may feel misunderstood or overstimulated.', 'You can doubt your gift when it feels too intense.'],
+        now: 'Ground your light. You do not have to dim your sensitivity. You just need practices that help your spirit feel safe and centered.'
+      },
+      22: {
+        title: 'The Master Builder',
+        text: '22 is a master number of vision, discipline, legacy, and turning large dreams into real-world impact.',
+        themes: ['Legacy', 'Big vision', 'Execution', 'Impact'],
+        strengths: ['You can dream big and build practically.', 'You are capable of creating something that serves many people.', 'You carry serious manifestation power when focused.'],
+        challenges: ['Pressure can make you freeze or self-sabotage.', 'You may feel overwhelmed by the size of your own potential.', 'Balancing spiritual purpose with real structure is a key lesson.'],
+        now: 'This is a season to take your vision seriously. Your gift is not just seeing what could exist, but helping it become real.'
+      },
+      33: {
+        title: 'The Master Healer',
+        text: '33 is a master number of compassion, healing, upliftment, and heart-led service on a larger level.',
+        themes: ['Healing', 'Compassion', 'Service', 'Sacred love'],
+        strengths: ['You can nurture and uplift people deeply.', 'Your words and presence can feel healing.', 'You are often called to guide through love, care, and emotional wisdom.'],
+        challenges: ['Taking on too much can drain you.', 'You may feel responsible for everyone’s healing.', 'Boundaries are essential for your peace.'],
+        now: 'You are learning that true service is not self-sacrifice. Your healing power grows when your own spirit is also supported.'
+      }
+    };
+
+    function showMessage(type, text) {
+      messageBox.classList.remove('hidden', 'error-box', 'success-box');
+      messageBox.classList.add(type === 'error' ? 'error-box' : 'success-box');
+      messageBox.textContent = text;
+    }
+
+    function hideMessage() {
+      messageBox.className = 'hidden';
+      messageBox.textContent = '';
+    }
+
+    function cleanName(name) {
+      return name.replace(/[^a-zA-Z\s]/g, '').trim();
+    }
+
+    function sumDigits(numberString) {
+      return String(numberString)
+        .split('')
+        .filter(char => /\d/.test(char))
+        .reduce((sum, char) => sum + Number(char), 0);
+    }
+
+    function reduceNumber(num, keepMasters = true) {
+      let value = num;
+      while (value > 9) {
+        if (keepMasters && (value === 11 || value === 22 || value === 33)) {
+          return value;
+        }
+        value = String(value)
+          .split('')
+          .reduce((sum, digit) => sum + Number(digit), 0);
+      }
+      return value;
+    }
+
+    function getLifePath(dateString) {
+      const digits = dateString.replace(/-/g, '');
+      const total = sumDigits(digits);
+      return reduceNumber(total, true);
+    }
+
+    function getBirthdayNumber(dateString) {
+      const parts = dateString.split('-');
+      const day = Number(parts[2]);
+      return reduceNumber(day, true);
+    }
+
+    function getAttitudeNumber(dateString) {
+      const parts = dateString.split('-');
+      const month = Number(parts[1]);
+      const day = Number(parts[2]);
+      return reduceNumber(month + day, true);
+    }
+
+    function getPersonalYear(dateString) {
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      const [year, month, day] = dateString.split('-').map(Number);
+      const total = sumDigits(String(month)) + sumDigits(String(day)) + sumDigits(String(currentYear));
+      return reduceNumber(total, true);
+    }
+
+    function getProfile(number) {
+      return profiles[number] || profiles[reduceNumber(number, false)] || profiles[1];
+    }
+
+    function createListItems(items) {
+      return items.map(item => `<li>${item}</li>`).join('');
+    }
+
+    function createPills(items) {
+      return items.map(item => `<span class="pill">${item}</span>`).join('');
+    }
+
+    function buildSummary(name, lifePathProfile, focusArea) {
+      const firstName = cleanName(name).split(' ')[0] || 'Beautiful soul';
+      const focusText = focusArea
+        ? ` Right now, your energy may be especially asking for clarity around <strong>${focusArea}</strong>.`
+        : '';
+
+      return `${firstName}, your energy carries the signature of <strong>${lifePathProfile.title}</strong>. ${lifePathProfile.text}${focusText}`;
+    }
+
+    function buildMeaningNow(lifePathProfile, personalYearProfile, focusArea) {
+      let text = `${lifePathProfile.now} Your current personal year adds another layer: ${personalYearProfile.text}`;
+
+      if (focusArea) {
+        text += ` Around ${focusArea.toLowerCase()}, this suggests that your next step is not just to understand yourself, but to apply your insight with intention.`;
+      }
+
+      return text;
+    }
+
+    function renderResults(data) {
+      const lifePathProfile = getProfile(data.lifePath);
+      const birthdayProfile = getProfile(data.birthdayNumber);
+      const attitudeProfile = getProfile(data.attitudeNumber);
+      const personalYearProfile = getProfile(data.personalYear);
+
+      document.getElementById('resultTitle').textContent = `${cleanName(data.fullName).split(' ')[0] || 'Your'} New Bloom Reading`;
+      document.getElementById('resultSummary').innerHTML = buildSummary(data.fullName, lifePathProfile, data.focusArea);
+
+      document.getElementById('lifePathNumber').textContent = data.lifePath;
+      document.getElementById('lifePathText').textContent = lifePathProfile.text;
+
+      document.getElementById('birthdayNumber').textContent = data.birthdayNumber;
+      document.getElementById('birthdayText').textContent = birthdayProfile.text;
+
+      document.getElementById('attitudeNumber').textContent = data.attitudeNumber;
+      document.getElementById('attitudeText').textContent = attitudeProfile.text;
+
+      document.getElementById('personalYearNumber').textContent = data.personalYear;
+      document.getElementById('personalYearText').textContent = personalYearProfile.text;
+
+      const mergedThemes = [...new Set([
+        ...lifePathProfile.themes,
+        ...personalYearProfile.themes.slice(0, 2),
+        ...(data.focusArea ? [data.focusArea] : [])
+      ])];
+
+      const mergedStrengths = [...new Set([
+        ...lifePathProfile.strengths,
+        birthdayProfile.strengths[0],
+        attitudeProfile.strengths[0]
+      ])].slice(0, 5);
+
+      const mergedChallenges = [...new Set([
+        ...lifePathProfile.challenges,
+        personalYearProfile.challenges[0],
+        attitudeProfile.challenges[0]
+      ])].slice(0, 5);
+
+      document.getElementById('themesRow').innerHTML = createPills(mergedThemes);
+      document.getElementById('meaningNow').textContent = buildMeaningNow(lifePathProfile, personalYearProfile, data.focusArea);
+      document.getElementById('strengthList').innerHTML = createListItems(mergedStrengths);
+      document.getElementById('challengeList').innerHTML = createListItems(mergedChallenges);
+
+      emptyState.classList.add('hidden');
+      results.classList.remove('hidden');
+    }
+
+    function validateForm(fullName, birthDate) {
+      if (!fullName.trim()) {
+        return 'Please enter a full name so the reading feels personalized.';
+      }
+
+      if (cleanName(fullName).split(' ').length < 2) {
+        return 'Try entering a full first and last name for the best experience.';
+      }
+
+      if (!birthDate) {
+        return 'Please enter a date of birth to generate the reading.';
+      }
+
+      const chosenDate = new Date(birthDate + 'T00:00:00');
+      const today = new Date();
+
+      if (Number.isNaN(chosenDate.getTime())) {
+        return 'That date of birth does not look valid.';
+      }
+
+      if (chosenDate > today) {
+        return 'Your date of birth cannot be in the future.';
+      }
+
+      return null;
+    }
+
+    readingForm.addEventListener('submit', event => {
+      event.preventDefault();
+      hideMessage();
+
+      const fullName = fullNameInput.value;
+      const birthDate = birthDateInput.value;
+      const focusArea = focusAreaInput.value.trim();
+
+      const error = validateForm(fullName, birthDate);
+      if (error) {
+        showMessage('error', error);
+        return;
+      }
+
+      const readingData = {
+        fullName,
+        birthDate,
+        focusArea,
+        lifePath: getLifePath(birthDate),
+        birthdayNumber: getBirthdayNumber(birthDate),
+        attitudeNumber: getAttitudeNumber(birthDate),
+        personalYear: getPersonalYear(birthDate)
+      };
+
+      renderResults(readingData);
+      showMessage('success', 'Your New Bloom reading is ready. Scroll through your results and see what energy is showing up for you right now.');
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    fillDemoBtn.addEventListener('click', () => {
+      fullNameInput.value = 'Jasmine Brown';
+      birthDateInput.value = '1992-06-11';
+      focusAreaInput.value = 'clarity and next steps';
+      hideMessage();
+    });
+
+    clearFormBtn.addEventListener('click', () => {
+      readingForm.reset();
+      hideMessage();
+      results.classList.add('hidden');
+      emptyState.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
